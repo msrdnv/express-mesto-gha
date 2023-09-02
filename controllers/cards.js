@@ -15,11 +15,30 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  console.log(req.params.cardId);
   Card.findByIdAndRemove(req.params.cardId)
-    .then(() => {
+    .then((data) => {
+      res.send(data);
       console.log('Карточка удалена');
-      res.end();
     })
+    .catch((err) => console.log(err));
+};
+
+module.exports.likeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true, runValidators: true },
+  )
+    .then((data) => res.send(data))
+    .catch((err) => console.log(err));
+};
+
+module.exports.dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true, runValidators: true },
+  )
+    .then((data) => res.send(data))
     .catch((err) => console.log(err));
 };
