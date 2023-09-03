@@ -9,42 +9,42 @@ const returnCardInfo = (data) => ({
   createdAt: data.createdAt,
 });
 
-module.exports.findCards = (req, res) => {
+module.exports.findCards = (req, res, next) => {
   Card.find({})
     .then((data) => res.send(data.map((item) => returnCardInfo(item))))
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then(() => res.send({ message: 'Пост удалён' }))
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => console.log(err));
+    .catch((err) => next(err));
 };
