@@ -1,15 +1,5 @@
 const User = require('../models/user');
-
-const ERROR_CODE = 400;
-const ERR_MSG = { message: 'Ошибка: Проверьте параметры запроса' };
-
-const handleValidationError = (err, req, res, next) => {
-  if (err.name === 'ValidationError') {
-    res.status(ERROR_CODE).send(ERR_MSG);
-    return;
-  }
-  next(err);
-};
+const { handleValidationError, handleCastTypeErrors } = require('../utils/utils');
 
 const returnUserInfo = (data) => ({
   name: data.name, about: data.about, avatar: data.avatar, _id: data._id,
@@ -24,13 +14,7 @@ module.exports.findUsers = (req, res, next) => {
 module.exports.findUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((data) => res.send(returnUserInfo(data)))
-    .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'TypeError') {
-        res.status(404).send({ message: 'Такого пользователя нет' });
-        return;
-      }
-      next(err);
-    });
+    .catch((err) => handleCastTypeErrors(err, req, res, next));
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -48,7 +32,7 @@ module.exports.updateProfile = (req, res, next) => {
       .then((data) => res.send(returnUserInfo(data)))
       .catch((err) => handleValidationError(err, req, res, next));
   } else {
-    res.status(ERROR_CODE).send(ERR_MSG);
+    res.status(400).send({ message: 'Ошибка: Проверьте параметры запроса' });
   }
 };
 
@@ -60,6 +44,6 @@ module.exports.updateAvatar = (req, res, next) => {
       .then((data) => res.send(returnUserInfo(data)))
       .catch((err) => handleValidationError(err, req, res, next));
   } else {
-    res.status(ERROR_CODE).send(ERR_MSG);
+    res.status(400).send({ message: 'Ошибка: Проверьте параметры запроса' });
   }
 };

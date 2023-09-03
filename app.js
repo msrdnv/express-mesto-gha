@@ -21,9 +21,11 @@ app.use((req, res, next) => {
 app.use('/users', users);
 app.use('/cards', cards);
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.send({ message: err.message || 'На сервере произошла ошибка' });
-  next();
+  if (err.status === 404) {
+    next(err);
+    return;
+  }
+  res.status(err.status || 500).send({ message: err.message || 'На сервере произошла ошибка' });
 });
 app.use((req, res) => {
   res.status(404).send({ message: 'Ресурс не найден. Проверьте URL и метод запроса' });

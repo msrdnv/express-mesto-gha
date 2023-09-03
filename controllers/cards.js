@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const { handleValidationError, handleCastTypeErrors } = require('../utils/utils');
 
 const returnCardInfo = (data) => ({
   likes: data.likes,
@@ -20,13 +21,13 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => next(err));
+    .catch((err) => handleValidationError(err, req, res, next));
 };
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then(() => res.send({ message: 'Пост удалён' }))
-    .catch((err) => next(err));
+    .then(() => res.send({ message: 'Карточка удалена' }))
+    .catch((err) => handleCastTypeErrors(err, req, res, next));
 };
 
 module.exports.likeCard = (req, res, next) => {
@@ -36,7 +37,7 @@ module.exports.likeCard = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => next(err));
+    .catch((err) => handleCastTypeErrors(err, req, res, next));
 };
 
 module.exports.dislikeCard = (req, res, next) => {
@@ -46,5 +47,5 @@ module.exports.dislikeCard = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .then((data) => res.send(returnCardInfo(data)))
-    .catch((err) => next(err));
+    .catch((err) => handleCastTypeErrors(err, req, res, next));
 };
