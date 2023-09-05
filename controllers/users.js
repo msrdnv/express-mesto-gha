@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const { handleValidationError, handleCastTypeErrors } = require('../utils/utils');
+const { handleValidationError, handleCastTypeErrors, ERR_CODE } = require('../utils/utils');
 
 const returnUserInfo = (data) => ({
   name: data.name, about: data.about, avatar: data.avatar, _id: data._id,
@@ -32,7 +32,7 @@ module.exports.updateProfile = (req, res, next) => {
       .then((data) => res.send(returnUserInfo(data)))
       .catch((err) => handleValidationError(err, req, res, next));
   } else {
-    res.status(400).send({ message: 'Ошибка: Проверьте параметры запроса' });
+    res.status(ERR_CODE).send({ message: 'Ошибка: Проверьте параметры запроса' });
   }
 };
 
@@ -44,6 +44,6 @@ module.exports.updateAvatar = (req, res, next) => {
       .then((data) => res.send(returnUserInfo(data)))
       .catch((err) => handleValidationError(err, req, res, next));
   } else {
-    res.status(400).send({ message: 'Ошибка: Проверьте параметры запроса' });
+    res.status(ERR_CODE).send({ message: 'Ошибка: Проверьте параметры запроса' });
   }
 };
