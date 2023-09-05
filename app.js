@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
-const errorHandler = require('./middlewares/errorHandler');
-const notFoundErrorHandler = require('./middlewares/notFoundErrorHandler');
+const { errorHandler } = require('./middlewares/errorHandler');
+const { notFoundErrorHandler } = require('./middlewares/notFoundErrorHandler');
 
 const { PORT = 3000 } = process.env;
 const app = express();
