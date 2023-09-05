@@ -4,8 +4,11 @@ const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
-const { errorHandler } = require('./middlewares/errorHandler');
-const { notFoundErrorHandler } = require('./middlewares/notFoundErrorHandler');
+const { handleValidationError } = require('./middlewares/handleValidationError');
+const { handleTypeError } = require('./middlewares/handleTypeError');
+const { handleCastError } = require('./middlewares/handleCastError');
+const { handleServerError } = require('./middlewares/handleServerError');
+const { handleNotFoundError } = require('./middlewares/handleNotFoundError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -23,8 +26,11 @@ app.use((req, res, next) => {
 });
 app.use('/users', users);
 app.use('/cards', cards);
-app.use(errorHandler);
-app.use(notFoundErrorHandler);
+app.use(handleValidationError);
+app.use(handleTypeError);
+app.use(handleCastError);
+app.use(handleServerError);
+app.use(handleNotFoundError);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
