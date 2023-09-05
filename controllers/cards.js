@@ -24,8 +24,14 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then(() => res.send({ message: 'Карточка удалена' }))
+  Card.deleteOne({ _id: req.params.cardId })
+    .then((data) => {
+      if (data.deletedCount === 1) {
+        res.status(200).send({ message: 'Карточка удалена' });
+        return;
+      }
+      res.status(404).send({ message: 'Запрашиваемая карточка не найдена' });
+    })
     .catch((err) => next(err));
 };
 
