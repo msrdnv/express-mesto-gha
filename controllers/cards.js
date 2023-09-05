@@ -24,12 +24,9 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  if (!Card.findById(req.params.cardId) === null) {
-    Card.findByIdAndRemove(req.params.cardId)
-      .then(() => res.send({ message: 'Карточка удалена' }))
-      .catch((err) => next(err));
-  }
-  res.status(404).send({ message: 'Запрашиваемая карточка не найдена' });
+  Card.findByIdAndRemove(req.params.cardId)
+    .then(() => res.send({ message: 'Карточка удалена' }))
+    .catch((err) => next(err));
 };
 
 module.exports.likeCard = (req, res, next) => {
