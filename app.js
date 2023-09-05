@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
-const setUserId = require('./middlewares/setUserId');
 const errorHandler = require('./middlewares/errorHandler');
 const notFoundErrorHandler = require('./middlewares/notFoundErrorHandler');
 
@@ -15,7 +14,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(setUserId);
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64f358b939b9fc4d6062d897',
+  };
+
+  next();
+});
 app.use('/users', users);
 app.use('/cards', cards);
 app.use(errorHandler);
