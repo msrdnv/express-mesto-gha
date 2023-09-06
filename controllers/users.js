@@ -6,7 +6,7 @@ const returnUserInfo = (data) => ({
 
 const updateUserInfo = ({ cond }, update, req, res, next) => {
   if (cond) {
-    User.findByIdAndUpdate(req.user._id, update, { new: true })
+    User.findByIdAndUpdate(req.user._id, update, { new: true, runValidators: true })
       .then((data) => res.send(returnUserInfo(data)))
       .catch((err) => next(err));
   } else {
