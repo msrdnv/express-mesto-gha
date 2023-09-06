@@ -1,36 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const users = require('./routes/users');
-const cards = require('./routes/cards');
+const index = require('./routes/index');
 
-const { handleValidationError } = require('./middlewares/handleValidationError');
-const { handleTypeError } = require('./middlewares/handleTypeError');
-const { handleCastError } = require('./middlewares/handleCastError');
-const { handleServerError } = require('./middlewares/handleServerError');
-const { handleNotFoundError } = require('./middlewares/handleNotFoundError');
+const { handleErrors } = require('./middlewares/handleErrors');
+const { handleNotFoundPage } = require('./middlewares/handleNotFoundPage');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   req.user = {
-    _id: '64f358b939b9fc4d6062d897',
+    _id: '64f8810dfe23fb6e255c89d1',
   };
 
   next();
 });
-app.use('/users', users);
-app.use('/cards', cards);
-app.use(handleValidationError);
-app.use(handleTypeError);
-app.use(handleCastError);
-app.use(handleServerError);
-app.use(handleNotFoundError);
+app.use('/', index);
+app.use(handleErrors);
+app.use('*', handleNotFoundPage);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
