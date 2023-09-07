@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
+const httpConstants = require('http2').constants;
 
 module.exports.handleErrors = ((err, req, res, next) => {
   if (err instanceof mongoose.Error.DocumentNotFoundError) {
-    res.status(404).send({ message: 'Запрашиваемый пользователь или карточка не найдены' });
+    res.status(httpConstants.HTTP_STATUS_NOT_FOUND).send({ message: 'Запрашиваемый пользователь или карточка не найдены' });
     return;
   }
   if (err instanceof mongoose.Error.CastError || err instanceof mongoose.Error.ValidationError) {
-    res.status(400).send({ message: 'Переданы некорректные данные' });
+    res.status(httpConstants.HTTP_STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
     return;
   }
   console.error(err);
-  res.status(500).send({ message: 'На сервере произошла ошибка' });
+  res.status(httpConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
   next();
 });

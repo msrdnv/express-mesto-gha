@@ -1,5 +1,5 @@
-const ERR_CODE = 404;
+const httpConstants = require('http2').constants;
 
 module.exports.handleNotFoundPage = (req, res) => {
-  res.status(ERR_CODE).send({ message: 'Ресурс не найден. Проверьте URL и метод запроса' });
+  res.status(httpConstants.HTTP_STATUS_NOT_FOUND).send({ message: 'Ресурс не найден. Проверьте URL и метод запроса' });
 };
