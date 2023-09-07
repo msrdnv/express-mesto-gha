@@ -4,14 +4,10 @@ const returnUserInfo = (data) => ({
   name: data.name, about: data.about, avatar: data.avatar, _id: data._id,
 });
 
-const updateUserInfo = ({ cond }, update, req, res, next) => {
-  if (cond) {
-    User.findByIdAndUpdate(req.user._id, update, { new: true, runValidators: true })
-      .then((data) => res.send(returnUserInfo(data)))
-      .catch((err) => next(err));
-  } else {
-    res.status(400).send({ message: 'Ошибка: Проверьте параметры запроса' });
-  }
+const updateUserInfo = (update, req, res, next) => {
+  User.findByIdAndUpdate(req.user._id, update, { new: true, runValidators: true })
+    .then((data) => res.send(returnUserInfo(data)))
+    .catch((err) => next(err));
 };
 
 module.exports.findUsers = (req, res, next) => {
@@ -35,21 +31,9 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.updateProfile = (req, res, next) => {
-  updateUserInfo(
-    { cond: req.body.name || req.body.about },
-    { name: req.body.name, about: req.body.about },
-    req,
-    res,
-    next,
-  );
+  updateUserInfo({ name: req.body.name, about: req.body.about }, req, res, next);
 };
 
 module.exports.updateAvatar = (req, res, next) => {
-  updateUserInfo(
-    { cond: req.body.avatar },
-    { avatar: req.body.avatar },
-    req,
-    res,
-    next,
-  );
+  updateUserInfo({ avatar: req.body.avatar }, req, res, next);
 };

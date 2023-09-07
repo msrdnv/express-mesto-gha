@@ -9,10 +9,7 @@ module.exports.handleErrors = ((err, req, res, next) => {
     res.status(400).send({ message: 'Переданы некорректные данные' });
     return;
   }
-  if (err) {
-    console.error(err);
-    res.status(500).send({ message: 'На сервере произошла ошибка' });
-    return;
-  }
-  next('route');
+  console.error(err);
+  res.status(500).send({ message: 'На сервере произошла ошибка' });
+  next();
 });
