@@ -30,7 +30,22 @@ module.exports.deleteCard = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+const updateCardInfo = (update, req, res, next) => {
+  Card.findByIdAndUpdate(req.params.cardId, update, { new: true })
+    .orFail()
+    .then((data) => res.send(returnCardInfo(data)))
+    .catch((err) => next(err));
+};
+
 module.exports.likeCard = (req, res, next) => {
+  updateCardInfo({ $addToSet: { likes: req.user._id } }, req, res, next);
+};
+
+module.exports.dislikeCard = (req, res, next) => {
+  updateCardInfo({ $pull: { likes: req.user._id } }, req, res, next);
+};
+
+/* module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -50,4 +65,4 @@ module.exports.dislikeCard = (req, res, next) => {
     .orFail()
     .then((data) => res.send(returnCardInfo(data)))
     .catch((err) => next(err));
-};
+}; */
