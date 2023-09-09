@@ -7,7 +7,7 @@ module.exports.handleErrors = ((err, req, res, next) => {
     return;
   }
   if (err instanceof mongoose.Error.CastError || err instanceof mongoose.Error.ValidationError) {
-    //console.error(err);
+    console.error(err);
     res.status(httpConstants.HTTP_STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
     return;
   }

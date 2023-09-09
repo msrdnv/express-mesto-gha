@@ -11,14 +11,8 @@ const updateUserInfo = (update, req, res, next) => {
     .catch(next);
 };
 
-module.exports.findUsers = (req, res, next) => {
-  User.find({})
-    .then((data) => res.send(data.map((item) => returnUserInfo(item))))
-    .catch(next);
-};
-
-module.exports.findUser = (req, res, next) => {
-  User.findById(req.params.userId)
+const getUserInfo = (userId, req, res, next) => {
+  User.findById(userId)
     .orFail()
     .then((data) => res.send(returnUserInfo(data)))
     .catch(next);
@@ -35,6 +29,20 @@ module.exports.createUser = (req, res, next) => {
     }))
     .then((data) => res.send(returnUserInfo(data)))
     .catch(next);
+};
+
+module.exports.findUsers = (req, res, next) => {
+  User.find({})
+    .then((data) => res.send(data.map((item) => returnUserInfo(item))))
+    .catch(next);
+};
+
+module.exports.getCurrentUserInfo = (req, res, next) => {
+  getUserInfo(req.user._id, req, res, next);
+};
+
+module.exports.findUser = (req, res, next) => {
+  getUserInfo(req.params.userId, req, res, next);
 };
 
 module.exports.updateProfile = (req, res, next) => {
