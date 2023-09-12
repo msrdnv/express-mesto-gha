@@ -1,17 +1,12 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const BadRequestError = require('../utils/BadRequestError');
 
 const returnUserInfo = (data) => ({
   name: data.name, about: data.about, avatar: data.avatar, _id: data._id,
 });
 
 module.exports.login = (req, res, next) => {
-  if (!req.body.email || !req.body.password) {
-    next(new BadRequestError());
-    return;
-  }
   User.findUser(req.body.email, req.body.password)
     .then((user) => {
       const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
