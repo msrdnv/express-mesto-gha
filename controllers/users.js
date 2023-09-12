@@ -29,16 +29,11 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.findUsers = (req, res, next) => {
-  User.find({})
+  User.find({}, 'name about avatar _id')
     .then((data) => {
-      let newArr = [];
-      newArr = data.map((item) => returnUserInfo(item));
-      res.send(newArr);
-    })
-    /* .then((data) => {
       res.send(data);
-      console.log(typeof (data));
-    }) */
+      // data.map((item) => returnUserInfo(item));
+    })
     .catch(next);
 };
 
