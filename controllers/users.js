@@ -30,8 +30,15 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.findUsers = (req, res, next) => {
   User.find({})
-    .then((data) => res.send(JSON.stringify(data.map((item) => returnUserInfo(item)))))
-    // .then((data) => res.send(data))
+    .then((data) => {
+      const newObj = data.map((item) => returnUserInfo(item));
+      console.log(typeof (newObj));
+      res.send(newObj);
+    })
+    /* .then((data) => {
+      res.send(data);
+      console.log(typeof (data));
+    }) */
     .catch(next);
 };
 
