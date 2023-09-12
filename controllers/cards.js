@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const ForbiddenError = require('../utils/ForbiddenError');
 
 const returnCardInfo = (data) => ({
   likes: data.likes,
@@ -22,9 +23,17 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .orFail()
-    .then(() => res.send({ message: 'Карточка удалена' }))
+    .then((card) => {
+      if (!card.owner.equals(req.user._id)) {
+        return next(new ForbiddenError('Вы не можете удалять чужие карточки!'));
+      }
+      return Card.findByIdAndRemove(req.params.cardId)
+        .orFail()
+        .then(() => res.send({ message: 'Карточка удалена' }))
+        .catch(next);
+    })
     .catch(next);
 };
 
