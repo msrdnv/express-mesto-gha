@@ -31,9 +31,9 @@ module.exports.createUser = (req, res, next) => {
 module.exports.findUsers = (req, res, next) => {
   User.find({})
     .then((data) => {
-      const newObj = data.map((item) => returnUserInfo(item));
-      console.log(typeof (newObj));
-      res.send(newObj);
+      let newArr = [];
+      newArr = data.map((item) => returnUserInfo(item));
+      res.send(newArr);
     })
     /* .then((data) => {
       res.send(data);
