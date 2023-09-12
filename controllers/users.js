@@ -30,8 +30,8 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.findUsers = (req, res, next) => {
   User.find({})
-    // .then((data) => res.send(data.map((item) => returnUserInfo(item))))
-    .then((data) => res.send(data))
+    .then((data) => res.send(data.map((item) => returnUserInfo(item))))
+    // .then((data) => res.send(data))
     .catch(next);
 };
 
