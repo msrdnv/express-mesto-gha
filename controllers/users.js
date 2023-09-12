@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const returnUserInfo = (data) => ({
-  name: data.name, about: data.about, avatar: data.avatar, _id: data._id,
+  name: data.name, about: data.about, avatar: data.avatar, email: data.email, _id: data._id,
 });
 
 module.exports.login = (req, res, next) => {
@@ -29,11 +29,8 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.findUsers = (req, res, next) => {
-  User.find({}, 'name about avatar email _id')
-    .then((data) => {
-      res.send(data);
-      // data.map((item) => returnUserInfo(item));
-    })
+  User.find({})
+    .then((data) => res.send(data.map((item) => returnUserInfo(item))))
     .catch(next);
 };
 
