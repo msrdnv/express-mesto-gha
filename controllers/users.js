@@ -29,7 +29,7 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.findUsers = (req, res, next) => {
-  User.find({}, 'name about avatar _id')
+  User.find({}, 'name about avatar email _id')
     .then((data) => {
       res.send(data);
       // data.map((item) => returnUserInfo(item));
