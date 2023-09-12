@@ -1,15 +1,12 @@
 const mongoose = require('mongoose');
 const httpConstants = require('http2').constants;
-const { CelebrateError } = require('celebrate');
 const BadRequestError = require('../utils/BadRequestError');
 const UnautorizedError = require('../utils/UnautorizedError');
 
 module.exports.handleErrors = ((err, req, res, next) => {
   if (err instanceof mongoose.Error.CastError
     || err instanceof mongoose.Error.ValidationError
-    || err instanceof BadRequestError
-    || err instanceof CelebrateError) {
-    console.log(err.details);
+    || err instanceof BadRequestError) {
     res.status(httpConstants.HTTP_STATUS_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
     return;
   }

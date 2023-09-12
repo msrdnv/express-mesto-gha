@@ -21,10 +21,6 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  if (!req.body.email || !req.body.password) {
-    next(new BadRequestError());
-    return;
-  }
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
