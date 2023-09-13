@@ -3,19 +3,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
 
+const urlRegex = require('./utils/regex');
+const { login, createUser } = require('./controllers/users');
 const index = require('./routes/index');
-
+const auth = require('./middlewares/auth');
 const { handleErrors } = require('./middlewares/handleErrors');
 const { handleNotFoundPage } = require('./middlewares/handleNotFoundPage');
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
-
-const urlRegex = require('./utils/regex');
 
 const { PORT = 3000 } = process.env;
-const app = express();
+mongoose.connect(process.env.CONNECTION_URL);
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
