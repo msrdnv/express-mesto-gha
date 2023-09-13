@@ -9,7 +9,7 @@ const returnUserInfo = (data) => ({
 module.exports.login = (req, res, next) => {
   User.findUser(req.body.email, req.body.password)
     .then((user) => {
-      const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user.id }, process.env.SECRET_KEY, { expiresIn: '7d' });
       res.send({ token });
     })
     .catch(next);

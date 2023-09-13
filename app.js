@@ -10,8 +10,8 @@ const auth = require('./middlewares/auth');
 const { handleErrors } = require('./middlewares/handleErrors');
 const { handleNotFoundPage } = require('./middlewares/handleNotFoundPage');
 
-const { PORT = 3000 } = process.env;
-mongoose.connect(process.env.CONNECTION_URL);
+const { PORT, DB_URL } = process.env;
+mongoose.connect(DB_URL);
 
 const app = express();
 

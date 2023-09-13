@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {
-    payload = jwt.verify(token, process.env.JWT_SECRET);
+    payload = jwt.verify(token, process.env.SECRET_KEY);
   } catch (err) {
     return next(new UnautorizedError('Необходима авторизация'));
   }
